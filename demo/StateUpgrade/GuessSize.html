@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>猜大小</title>
+    <style>
+        body * {
+            margin: 0;
+            padding: 0;
+        }
+        .table {
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .table h3 {
+            text-align: center;
+        }
+        .display {
+            text-align: center;
+        }
+        .users {
+            display: flex;
+            justify-content: space-around;
+        }
+        .showDice {
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            margin: 10px auto;
+            font-weight: bold;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        .user {
+            width: 200px;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/javascript" crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script type="text/javascript" crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://cdn.bootcss.com/babel-standalone/7.0.0-beta.3/babel.min.js"></script>
+    <script type="text/babel">
+        class Table extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    dice: '',
+                    users: [],
+                    result: ''
+                };
+                this.check = this.check.bind(this);
+                this.add = this.add.bind(this);
+            }
+            check(index, type) {
+                console.log(index);
+                var users = this.state.users;
+                users[index].ready = true;
+                users[index].type = type;
+                this.setState({users})
+                var flag = users.every(item => item.ready);
+                if (flag) {
+                    this.start();
+                    this.judge();
+                }
+            }
+            start() {
+                this.setState({
+                    dice: Math.ceil(Math.random()*6)
+                })
+            }
+            judge() {
+                var {dice, users, result} = this.state;
+                if (dice <= 3) {
+                    result = 'small';
+                } else {
+                    result = 'big';
+                }
+                this.setState({result});
+            }
+            add() {
+                // 先获取
+                var users = this.state.users;
+                // 再添加
+                users.push({ready: false, type: 'default'});
+                // 再修改
+                this.setState({users});
+                console.log('add', this.state.users);
+            }
+            render() {
+                var {dice, users, result} = this.state;
+                console.log('render', result);
+                return (
+                    <div className="table">
+                        <h3>赌毒~赌毒~赌毒赌毒嘟~</h3>
+                        <div className="display">
+                            <div className="showDice">{dice}</div>
+                            <h4>Win {result}</h4>
+                            <button onClick={this.add}>再来一个赌徒</button>
+                        </div>
+                        <div className="users">
+                            {users.map((item, index) => (
+                                <User index={index} check={this.check} key={index}/>
+                            ))}     
+                        </div>
+                    </div>
+                );
+            }
+        }
+        class User extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    name: 'robot',
+                    money: '',
+                    balance: 1000,
+                    disabled: false
+                };
+                this.commit = this.commit.bind(this);
+                this.handleChange = this.handleChange.bind(this);
+            }
+            commit(e) {
+                if (this.state.money === '') {
+                    alert('赶紧押钱啊！');
+                    return;
+                } else if (parseFloat(this.state.money) > this.state.balance) {
+                    alert('你那来那么多钱？！');
+                    return;
+                }
+                this.setState({disabled: true});
+                this.props.check(this.props.index, e.target.title);
+            }
+            handleChange(e) {
+                this.setState({money: e.target.value});
+            }
+            render() {
+                var {name, money, balance, disabled} = this.state;
+                return (
+                    <div className="user">
+                        <h3>赌徒: {name}</h3>
+                        <input type="text" placeholder="押钱！" value={money} disabled={disabled} onChange={this.handleChange}/><br/>
+                        <span>余额: {balance}</span><br/>
+                        <button disabled={disabled} onClick={this.commit} title="big">押大</button>    &nbsp;
+                        <button disabled={disabled} onClick={this.commit} title="small">押小</button>
+                    </div>
+                );
+            }
+        }
+        ReactDOM.render(
+            <Table />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>

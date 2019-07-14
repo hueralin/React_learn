@@ -33,3 +33,14 @@ ReactDOM.render(
 
 **JSX 表示对象**  
 Babel 会把 JSX 转译成一个名为 `React.createElement()` 函数调用。
+---   
+##  配置Babel，转译JSX  
+1. 安装npm和node
+2. 创建一个新文件夹，运行npm init命令
+3. npm install babel-cli babel-preset-react --save-dev
+4. 在package.json中添加预设 {"babel": { "presets": ["react"] } }
+5. 检查Babel是否工作 ./node_modules/.bin/babel --version
+6. 将jsx转化为js文件
+7. ./node_modules/.bin/babel a.jsx -o a.js
+8. 也可以将该命令写到package的脚本中 “build”：“./node_modules/.bin/babel a.jsx -o a.js”
+9. 使用 -w（--watch）选项来自动转译

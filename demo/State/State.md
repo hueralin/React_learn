@@ -1,4 +1,4 @@
-# State & lifeCircle  
+# State  
 
 当前组件维护的状态都在 this.state 中  
 state 的初始化在组件的构造函数中 `this.state = {name: 'malin'}`   
@@ -6,10 +6,6 @@ state 的初始化在组件的构造函数中 `this.state = {name: 'malin'}`
 **State 的更新可能是异步的**  
 出于性能考虑，React 可能会把多个 setState() 调用合并成一个调用,所以不要依赖他们的值来更新下一个状态  
 setState() 方法会触发render，且只改变需要改变的地方。
-
-**生命周期方法**  
-1. componentDidMount    当组件的输出被插入到DOM中时，就会调用该函数
-2. componentWillUnmount 当组件从DOM中移除时调用该函数
 
 **数据是向下流动的**  
 数据是自上而下”或是“单向”的数据流。  

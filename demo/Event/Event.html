@@ -31,8 +31,28 @@
                 );
             }
         }
+        class Counter extends React.Component {
+            constructor(props) {
+                super(props)
+                this.state = {
+                    count: 0
+                }
+            }
+            handleClickCounter(e) {
+                this.setState({count: ++this.state.count})
+            }
+            render() {
+                const state = this.state
+                return (
+                    <button onClick={this.handleClickCounter.bind(this)}>{state.count}</button>
+                )
+            }
+        }
         ReactDOM.render(
-            <Toogle />,
+            <div>
+                <Toogle />
+                <Counter/>
+            </div>,
             document.getElementById('root')
         );
     </script>
